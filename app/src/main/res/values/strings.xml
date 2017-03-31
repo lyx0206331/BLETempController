@@ -1,0 +1,5 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">BLETempController</string>
+    <string name="temp_info"><xliff:g id="temp">%1$.1f</xliff:g>℃</string>
+
+</resources>
