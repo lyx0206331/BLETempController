@@ -566,24 +566,6 @@ public class OperateActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private int getRadomColor(int index) {
-//        String r,g,b;
-//        Random random = new Random();
-//        r = Integer.toHexString(random.nextInt(256)).toUpperCase();
-//        g = Integer.toHexString(random.nextInt(256)).toUpperCase();
-//        b = Integer.toHexString(random.nextInt(256)).toUpperCase();
-//
-//        r = r.length()==1 ? "0" + r : r ;
-//        g = g.length()==1 ? "0" + g : g ;
-//        b = b.length()==1 ? "0" + b : b ;
-
-//        return Integer.parseInt("0x" + r+g+b, 16);
-
-        Random random = new Random();
-        int[] colors = {0xff0000, 0x00ff00, 0x0000ff};
-        return  colors[index];
-    }
-
     private int index = 0;
     private int[] colors = {0x80ff0000, 0x8000ff00, 0x800000ff};
 
