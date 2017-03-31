@@ -21,7 +21,7 @@ public class BleUtil {
     private static final String TAG = "BleUtil";
 
     private static final int SCAN_TIME = 5000;  //扫描时长
-    private static final int LISTEN_INTERVAL = 1000;    //温度监听间隔
+    private int listenInterval = 1000;    //温度监听间隔
 
     private static BleUtil instance;
 
@@ -47,6 +47,10 @@ public class BleUtil {
         return instance;
     }
 
+    public void setLisInterval(int interval) {
+        listenInterval = interval;
+    }
+
     public void closeBluetoothGatt() {
         bleManager.closeBluetoothGatt();
     }
@@ -56,7 +60,7 @@ public class BleUtil {
             return;
         }
 
-        bleManager.scanDevice(new ListScanCallback(5000) {
+        bleManager.scanDevice(new ListScanCallback(SCAN_TIME) {
             @Override
             public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
                 super.onLeScan(device, rssi, scanRecord);

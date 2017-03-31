@@ -297,7 +297,7 @@ public class OperateActivity extends AppCompatActivity implements View.OnClickLi
                         if (isChar) {
                             if (characteristic.getValue() != null) {
                                 mTempTV.setText(String.valueOf(HexUtil.encodeHex(characteristic.getValue())));
-                                mHandler.sendEmptyMessageDelayed(0, 1000);
+                                mHandler.sendEmptyMessageDelayed(0, 500);
                             } else {
                                 mHandler.sendEmptyMessageDelayed(0, 4000);
                             }
