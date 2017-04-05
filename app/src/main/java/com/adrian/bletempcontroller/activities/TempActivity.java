@@ -199,7 +199,7 @@ public class TempActivity extends AppCompatActivity implements RadioGroup.OnChec
 
     private void showConnectState2(String deviceName, BluetoothGatt gatt) {
         bleManager.getBluetoothState();
-        mDevNameTV.setText(deviceName);
+        mDevNameTV.setText("宝宝");
 
         if (gatt != null) {
             for (final BluetoothGattService service : gatt.getServices()) {
