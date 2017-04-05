@@ -242,7 +242,7 @@ public class TempActivity extends AppCompatActivity implements RadioGroup.OnChec
     };
 
     private int index = 0;
-    private int[] colors = {0x80ff0000, 0x8000ff00, 0x800000ff};
+    private int[] colors = {0x80ff0000/*, 0x8000ff00*/, 0x800000ff};
 
     private void startRead2(String serviceUUID, final String characterUUID) {
         Log.i(TAG, "startRead");
@@ -258,7 +258,7 @@ public class TempActivity extends AppCompatActivity implements RadioGroup.OnChec
                             public void run() {
                                 float value = Integer.parseInt(String.valueOf(HexUtil.encodeHex(characteristic.getValue())).substring(0, 4), 16) * 1.0f / 10;
                                 mTempTV.setText(getString(R.string.temp_info, value));
-                                index %= 3;
+                                index %= 2;
                                 mTempTV.setTextColor(colors[index]);
                                 index++;
                             }
