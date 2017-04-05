@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +39,7 @@ import java.util.Random;
  * Created by 陈利健 on 2016/9/20.
  * 可作为工具测试
  */
-public class OperateActivity extends AppCompatActivity implements View.OnClickListener {
+public class OperateActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
 //    temId:SERVICE_UUID==0000fff0-0000-1000-8000-00805f9b34fb
 //    CHAR_UUID==0000fff6-0000-1000-8000-00805f9b34fb
@@ -58,9 +60,12 @@ public class OperateActivity extends AppCompatActivity implements View.OnClickLi
     private TextView mDevNameTV;
     private TextView mTempTV;
     private Button mDisConnBtn;
+    private RadioGroup mInvervalRG;
 
     private BleManager bleManager;
     private ProgressDialog progressDialog;
+
+    private int intervalTime = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +84,13 @@ public class OperateActivity extends AppCompatActivity implements View.OnClickLi
         txt_device_name = (TextView) findViewById(R.id.txt_device_name);
         layout_character_list = (LinearLayout) findViewById(R.id.layout_character_list);
         layout_temperature = (LinearLayout) findViewById(R.id.layout_temperature);
+        mInvervalRG = (RadioGroup) findViewById(R.id.rg_interval);
         mDevNameTV = (TextView) findViewById(R.id.tv_dev_name);
         mTempTV = (TextView) findViewById(R.id.tv_tem);
         mDisConnBtn = (Button) findViewById(R.id.btn_disconn);
         mDisConnBtn.setOnClickListener(this);
+        mInvervalRG.setOnCheckedChangeListener(this);
+        mInvervalRG.check(R.id.rb_one);
 
         bleManager = new BleManager(this);
         bleManager.enableBluetooth();
@@ -297,7 +305,7 @@ public class OperateActivity extends AppCompatActivity implements View.OnClickLi
                         if (isChar) {
                             if (characteristic.getValue() != null) {
                                 mTempTV.setText(String.valueOf(HexUtil.encodeHex(characteristic.getValue())));
-                                mHandler.sendEmptyMessageDelayed(0, 500);
+                                mHandler.sendEmptyMessageDelayed(0, intervalTime);
                             } else {
                                 mHandler.sendEmptyMessageDelayed(0, 4000);
                             }
@@ -317,7 +325,7 @@ public class OperateActivity extends AppCompatActivity implements View.OnClickLi
             super.handleMessage(msg);
             startRead2(SERVICE_UUID, CHAR_UUID);
 //            stopListen(CHAR_UUID);
-            sendEmptyMessageDelayed(0, 1000);
+            sendEmptyMessageDelayed(0, intervalTime);
         }
     };
 
@@ -649,4 +657,15 @@ public class OperateActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    @Override
+    public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+        switch (checkedId) {
+            case R.id.rb_one:
+                intervalTime = 1000;
+                break;
+            case R.id.rb_five:
+                intervalTime = 5000;
+                break;
+        }
+    }
 }

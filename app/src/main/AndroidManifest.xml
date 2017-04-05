@@ -16,15 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".DemoActivity" />
+        <activity android:name=".OperateActivity" />
+        <activity android:name=".TemperatureActivity" />
+        <activity android:name=".activities.TempActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DemoActivity" />
-        <activity android:name=".OperateActivity" />
-        <activity android:name=".TemperatureActivity"></activity>
     </application>
 
 </manifest>

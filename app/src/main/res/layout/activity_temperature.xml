@@ -10,6 +10,27 @@
     android:padding="30dp"
     tools:context="com.adrian.bletempcontroller.TemperatureActivity">
 
+    <RadioGroup
+        android:id="@+id/rg_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="1s" />
+
+        <RadioButton
+            android:id="@+id/rb_five"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5s" />
+    </RadioGroup>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
@@ -20,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="测试"/>
+        android:text="未连接" />
 
     <TextView
         android:id="@+id/tv_tem"
@@ -32,5 +53,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:visibility="gone"
         android:text="断开连接"/>
 </LinearLayout>

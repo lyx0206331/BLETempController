@@ -27,16 +27,32 @@ public class MyApplication extends Application {
 
     private static final String TAG = "MyApplication";
 
+    private static final int SCAN_TIME = 5000;  //扫描时长
+    private int listenInterval = 1000;    //温度监听间隔
+
     private static MyApplication instance;
+
+    private BleManager bleManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+        bleManager = new BleManager(this);
+        bleManager.enableBluetooth();
     }
 
     public static MyApplication getInstance() {
         return instance;
+    }
+
+    public BleManager getBleManager() {
+        if (bleManager == null) {
+            bleManager = new BleManager(this);
+            bleManager.enableBluetooth();
+        }
+        return bleManager;
     }
 
 
