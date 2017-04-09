@@ -590,7 +590,7 @@ public class OperateActivity extends AppCompatActivity implements View.OnClickLi
                             @Override
                             public void run() {
                                 float value = Integer.parseInt(String.valueOf(HexUtil.encodeHex(characteristic.getValue())).substring(0, 4), 16) * 1.0f / 10;
-                                mTempTV.setText(getString(R.string.temp_info, value));
+                                mTempTV.setText(getString(R.string.centigrade, value));
                                 index %= 3;
                                 mTempTV.setTextColor(colors[index]);
                                 index++;

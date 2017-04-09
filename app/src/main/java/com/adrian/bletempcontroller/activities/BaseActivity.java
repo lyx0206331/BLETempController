@@ -16,7 +16,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void startActivity(Class<? extends Activity> dstAct) {
-        Intent intent = new Intent(getApplicationContext(), dstAct);
+        Intent intent = new Intent(this, dstAct);
         startActivity(intent);
     }
 
@@ -34,4 +34,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 数据加载
      */
     protected abstract void loadData();
+
+    protected void startActivity(Class<? extends BaseActivity> cls, Bundle bundle) {
+        Intent intent = new Intent(this, cls);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 }

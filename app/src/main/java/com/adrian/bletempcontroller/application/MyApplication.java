@@ -39,8 +39,8 @@ public class MyApplication extends Application {
         super.onCreate();
         instance = this;
 
-        bleManager = new BleManager(this);
-        bleManager.enableBluetooth();
+//        bleManager = new BleManager(this);
+//        bleManager.enableBluetooth();
     }
 
     public static MyApplication getInstance() {

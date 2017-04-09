@@ -1,5 +1,15 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">winstar</string>
-    <string name="temp_info"><xliff:g id="temp">%1$.1f</xliff:g>℃</string>
+    <string name="centigrade"><xliff:g id="value">%1$.1f</xliff:g>℃</string>
+    <string name="fahrenheit"><xliff:g id="value">%1$.1f</xliff:g>℉</string>
+
+    <string name="login">登录</string>
+    <string name="account_hint">请输入帐号</string>
+    <string name="password_hint">请输入6~8位密码</string>
+    <string name="home">主页</string>
+    <string name="register">注册</string>
+    <string name="experience">体验</string>
+    <string name="measure_now">实时测量</string>
+    <string name="measure_accurate">精确测量</string>
 
 </resources>

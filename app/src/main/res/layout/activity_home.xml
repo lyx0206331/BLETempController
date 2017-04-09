@@ -1,9 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.adrian.bletempcontroller.activities.HomeActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <RadioGroup
+        android:id="@+id/rg_measure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_acc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="20dp"
+            android:textColor="#80000000"
+            android:text="@string/measure_accurate" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#20000000" />
+
+        <RadioButton
+            android:id="@+id/rb_now"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="20dp"
+            android:textColor="#80000000"
+            android:text="@string/measure_now" />
+    </RadioGroup>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignBottom="@id/rg_measure"
+        android:background="#1010ff" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@id/rg_measure"
+        android:background="#20000000" />
+
+    <RelativeLayout
+        android:id="@+id/rl_acc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/fillet_shape"
+            android:gravity="center"
+            android:textColor="#80000000"
+            android:textSize="40sp"
+            android:text="36.8℃" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_now"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"></RelativeLayout>
+
+</RelativeLayout>

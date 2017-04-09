@@ -257,7 +257,7 @@ public class TempActivity extends AppCompatActivity implements RadioGroup.OnChec
                             @Override
                             public void run() {
                                 float value = Integer.parseInt(String.valueOf(HexUtil.encodeHex(characteristic.getValue())).substring(0, 4), 16) * 1.0f / 10;
-                                mTempTV.setText(getString(R.string.temp_info, value));
+                                mTempTV.setText(getString(R.string.centigrade, value));
                                 index %= 2;
                                 mTempTV.setTextColor(colors[index]);
                                 index++;
