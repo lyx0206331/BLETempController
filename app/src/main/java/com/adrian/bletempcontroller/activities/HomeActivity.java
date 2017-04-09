@@ -1,14 +1,21 @@
 package com.adrian.bletempcontroller.activities;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.adrian.bletempcontroller.R;
 
@@ -18,8 +25,29 @@ public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private View mLine;
     private RelativeLayout mAccMeasureRL;
     private RelativeLayout mNowMeasureRL;
+    private TextView mTempTV1;
+    private TextView mTempTV2;
+    private ImageView mBgIV2;
     private int lineWidth;
     private int curPos;
+
+    private float[] cent = {37.6f, 37.7f, 38.0f, 37.8f};
+    private int index;
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    refreshData();
+                    break;
+                case 1:
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +67,9 @@ public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mMeasureRG = (RadioGroup) findViewById(R.id.rg_measure);
         mAccMeasureRL = (RelativeLayout) findViewById(R.id.rl_acc);
         mNowMeasureRL = (RelativeLayout) findViewById(R.id.rl_now);
+        mTempTV1 = (TextView) findViewById(R.id.tv_temp1);
+        mTempTV2 = (TextView) findViewById(R.id.tv_temp2);
+        mBgIV2 = (ImageView) findViewById(R.id.iv_bg);
         mLine = findViewById(R.id.line);
         DisplayMetrics dm = getDisplayMetrics();
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mLine.getLayoutParams();
@@ -47,11 +78,18 @@ public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mLine.setLayoutParams(lp);
 
         mMeasureRG.setOnCheckedChangeListener(this);
+        mMeasureRG.check(R.id.rb_acc);
+    }
+
+    private void refreshData() {
+        mTempTV2.setText(getString(R.string.centigrade, cent[index++]));
+        index %= 4;
+        mHandler.sendEmptyMessageDelayed(0, 250);
     }
 
     @Override
     protected void loadData() {
-
+        mHandler.sendEmptyMessage(0);
     }
 
     @Override
@@ -66,6 +104,7 @@ public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 moveLine(1);
                 mAccMeasureRL.setVisibility(View.GONE);
                 mNowMeasureRL.setVisibility(View.VISIBLE);
+                startRotate();
                 break;
             default:
                 break;
@@ -79,6 +118,11 @@ public class HomeActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //        mLine.setAnimation(anim);
         mLine.startAnimation(anim);
         curPos = des;
+    }
+
+    private void startRotate() {
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.clockwise_rotation);
+        mBgIV2.startAnimation(anim);
     }
 
     private DisplayMetrics getDisplayMetrics() {
