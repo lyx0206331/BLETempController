@@ -1,0 +1,27 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.adrian.bletempcontroller.fragment.AccFragment">
+
+    <TextView
+        android:id="@+id/tv_acc_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="200dp"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/tv_acc_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/fillet_shape"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="#80000000"
+        android:textSize="40sp"
+        android:text="36.8℃" />
+
+</FrameLayout>

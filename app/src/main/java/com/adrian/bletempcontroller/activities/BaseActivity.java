@@ -1,11 +1,14 @@
 package com.adrian.bletempcontroller.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public abstract class BaseActivity extends AppCompatActivity {
+
+    private ProgressDialog mPd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,5 +42,26 @@ public abstract class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, cls);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    public void showProgress(String msg) {
+        if (mPd == null) {
+            mPd = new ProgressDialog(this);
+            mPd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mPd.setIndeterminate(false);
+            mPd.setCancelable(true);
+            mPd.setCanceledOnTouchOutside(false);
+        }
+        mPd.setMessage(msg);
+        if (!mPd.isShowing()) {
+            mPd.show();
+        }
+    }
+
+    public void hideProgress() {
+        if (mPd == null) return;
+        if (mPd.isShowing()) {
+            mPd.dismiss();
+        }
     }
 }

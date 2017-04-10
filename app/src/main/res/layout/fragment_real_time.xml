@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.adrian.bletempcontroller.fragment.RealTimeFragment">
+
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@mipmap/loading" />
+
+    <TextView
+        android:id="@+id/tv_rt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/iv_bg"
+        android:layout_marginBottom="20dp"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/tv_realtime_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:textColor="#80000000"
+        android:textSize="40sp"
+        android:text="36.8℃" />
+
+</RelativeLayout>

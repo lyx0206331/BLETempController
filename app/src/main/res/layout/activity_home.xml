@@ -54,48 +54,10 @@
         android:layout_alignBottom="@id/rg_measure"
         android:background="#20000000" />
 
-    <RelativeLayout
-        android:id="@+id/rl_acc"
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/rg_measure"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tv_temp1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/fillet_shape"
-            android:gravity="center"
-            android:textColor="#80000000"
-            android:textSize="40sp"
-            android:text="36.8℃" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_now"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/rg_measure"
-        android:visibility="visible">
-
-        <ImageView
-            android:id="@+id/iv_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@mipmap/loading" />
-
-        <TextView
-            android:id="@+id/tv_temp2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:textColor="#80000000"
-            android:textSize="40sp"
-            android:text="36.8℃" />
-    </RelativeLayout>
+        android:layout_below="@id/rg_measure"></FrameLayout>
 
 </RelativeLayout>

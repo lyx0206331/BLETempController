@@ -27,7 +27,6 @@
         </activity>
         <activity android:name=".DemoActivity" />
         <activity android:name=".OperateActivity" />
-        <activity android:name=".TemperatureActivity" />
         <activity android:name=".activities.TempActivity">
 
             <!--
