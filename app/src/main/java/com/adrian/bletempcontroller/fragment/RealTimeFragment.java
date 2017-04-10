@@ -25,7 +25,7 @@ public class RealTimeFragment extends BaseFragment {
 
     private static final String TAG = "RealTimeFragment";
 
-    private static final int INTERVAL_RT = 250;
+    private static final int INTERVAL_RT = 1;
 
     private ImageView mBgIV;
     private TextView mRealtimeTempTV;
@@ -34,6 +34,8 @@ public class RealTimeFragment extends BaseFragment {
     private float[] cents = {37.6f, 37.7f, 38.0f, 37.8f};
     private float cent = 37.8f;
     private int index;
+
+    private String temp;
 
     Handler mHandler = new Handler() {
         @Override
@@ -63,9 +65,8 @@ public class RealTimeFragment extends BaseFragment {
         mRealtimeTempTV = (TextView) mLayout.findViewById(R.id.tv_realtime_temp);
         mUsrNameTV = (TextView) mLayout.findViewById(R.id.tv_rt_name);
         mUsrNameTV.setText(((HomeActivity) getActivity()).getUserName());
-        ((HomeActivity) getActivity()).setIntervalTime(INTERVAL_RT);
-        mHandler.sendEmptyMessage(0);
-        startRotate();
+        ((HomeActivity) getActivity()).setType(INTERVAL_RT);
+//        mHandler.sendEmptyMessage(0);
         return mLayout;
     }
 
@@ -78,7 +79,7 @@ public class RealTimeFragment extends BaseFragment {
     protected void onVisible() {
         super.onVisible();
         Log.e(TAG, "onVisible");
-        ((HomeActivity) getActivity()).setIntervalTime(INTERVAL_RT);
+        ((HomeActivity) getActivity()).setType(INTERVAL_RT);
         mHandler.sendEmptyMessage(0);
     }
 
@@ -89,7 +90,12 @@ public class RealTimeFragment extends BaseFragment {
     }
 
     private void refreshData() {
-        mRealtimeTempTV.setText(getString(R.string.centigrade, cents[index++]));
+//        if (index == 3 && !TextUtils.isEmpty(temp)) {
+//            mRealtimeTempTV.setText(temp);
+//        } else {
+        mRealtimeTempTV.setText(getString(R.string.centigrade, cents[index]));
+//        }
+        index++;
         index %= 4;
         mHandler.sendEmptyMessageDelayed(0, 250);
     }
@@ -107,11 +113,15 @@ public class RealTimeFragment extends BaseFragment {
     }
 
     public void setTemp(String temp) {
-        mRealtimeTempTV.setText(temp);
+        this.temp = temp;
+//        mRealtimeTempTV.setText(temp);
     }
 
     public void setCents(float[] values) {
         cents = values;
+        if (!mHandler.hasMessages(0)) {
+            mHandler.sendEmptyMessage(0);
+        }
     }
 
     public void setCent(float value) {

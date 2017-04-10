@@ -47,6 +47,7 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
     private int curPos;
 
     private int intervalTime = 1000;
+    private int type = 0;
 
     private BleManager bleManager;
     private String userName = "宝宝";
@@ -116,8 +117,8 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
         }
     }
 
-    public void setIntervalTime(int intervalTime) {
-        this.intervalTime = intervalTime;
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getUserName() {
@@ -281,46 +282,65 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
 
     private int index = 0;
     private int[] colors = {0x80ff0000/*, 0x8000ff00*/, 0x800000ff};
+    private BleCharacterCallback characterCallback = new BleCharacterCallback() {
+        @Override
+        public void onSuccess(final BluetoothGattCharacteristic characteristic) {
+            Log.e(TAG, "interval:" + intervalTime);
+            Log.e(TAG, "read success: " + '\n' + String.valueOf(HexUtil.encodeHex(characteristic.getValue())));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String all = String.valueOf(HexUtil.encodeHex(characteristic.getValue()));
+                    float[] values = new float[4];
+                    values[3] = (float) (Integer.parseInt(all.substring(0, 4), 16) * .01f + Math.random() * .1f);
+                    values[2] = (float) (Integer.parseInt(all.substring(4, 8), 16) * .01f + Math.random() * .1f);
+                    values[1] = (float) (Integer.parseInt(all.substring(8, 12), 16) * .01f + Math.random() * .1f);
+                    values[0] = (float) (Integer.parseInt(all.substring(12, 16), 16) * .01f + Math.random() * .1f);
+//                                String value = new String(characteristic.getValue());
+                    if (type == 0) {
+                        index %= 2;
+                        ((AccFragment) fragments[0]).setCent(values[0], colors[index]);
+//                                    ((AccFragment) fragments[0]).setTemp(value);
+                        index++;
+                    } else {
+                        ((RealTimeFragment) fragments[1]).setCents(values);
+//                                    ((RealTimeFragment) fragments[1]).setTemp(value);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(BleException exception) {
+            bleManager.handleException(exception);
+            Log.e(TAG, "exception:" + exception.getCode() + " " + exception.getDescription());
+            if (bleManager.isConnected()) {
+                mHandler.sendEmptyMessage(1);
+            } else {
+                if (!bleManager.isInScanning()) {
+//                    bleManager.closeBluetoothGatt();
+//                    initBle();
+                    mHandler.sendEmptyMessageDelayed(0, 1000);
+                }
+            }
+        }
+    };
 
     private void startRead2(String serviceUUID, final String characterUUID) {
         Log.i(TAG, "startRead");
         boolean suc = bleManager.readDevice(
                 serviceUUID,
                 characterUUID,
-                new BleCharacterCallback() {
-                    @Override
-                    public void onSuccess(final BluetoothGattCharacteristic characteristic) {
-                        Log.e(TAG, "read success: " + '\n' + String.valueOf(HexUtil.encodeHex(characteristic.getValue())));
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                float value = Integer.parseInt(String.valueOf(HexUtil.encodeHex(characteristic.getValue())).substring(0, 4), 16) * 1.0f / 10;
-                                if (intervalTime == 1000) {
-                                    index %= 2;
-                                    ((AccFragment) fragments[0]).setCent(value, colors[index]);
-                                    index++;
-                                } else {
-                                    ((RealTimeFragment) fragments[1]).setCent(value);
-                                }
-                            }
-                        });
-                    }
+                characterCallback);
 
-                    @Override
-                    public void onFailure(BleException exception) {
-                        bleManager.handleException(exception);
-                        Log.e(TAG, "exception:" + exception.getCode() + " " + exception.getDescription());
-                        bleManager.closeBluetoothGatt();
-                        initBle();
-                        mHandler.sendEmptyMessageDelayed(0, 1000);
-                    }
-                });
-
-        if (suc) {
-//            View characterView = layout_character_list.findViewWithTag(characterUUID);
-//            if (characterView != null) {
-//                Button btn_properties = (Button) characterView.findViewById(R.id.btn_properties);
-//                btn_properties.setText(String.valueOf("stopListen"));
+        Log.e(TAG, "read success:" + suc);
+        if (!suc) {
+//            bleManager.stopListenConnectCallback();
+//            bleManager.closeBluetoothGatt();
+//            bleManager=null;
+//            initBle();
+//            if (!bleManager.isInScanning()) {
+//                mHandler.sendEmptyMessage(0);
 //            }
         }
     }

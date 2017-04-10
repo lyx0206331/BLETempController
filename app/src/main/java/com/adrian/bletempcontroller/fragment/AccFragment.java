@@ -19,7 +19,7 @@ public class AccFragment extends BaseFragment {
 
     private static final String TAG = "AccFragment";
 
-    private static final int INTERVAL_ACC = 1000;
+    private static final int INTERVAL_ACC = 0;
 
     private TextView mAccTempTV;
     private TextView mUsrNameTV;
@@ -39,7 +39,7 @@ public class AccFragment extends BaseFragment {
         mUsrNameTV = (TextView) mLayout.findViewById(R.id.tv_acc_name);
 //        ((HomeActivity)getActivity()).showProgress("loading...");
         mUsrNameTV.setText(((HomeActivity) getActivity()).getUserName());
-        ((HomeActivity) getActivity()).setIntervalTime(INTERVAL_ACC);
+        ((HomeActivity) getActivity()).setType(INTERVAL_ACC);
         return mLayout;
     }
 
@@ -52,7 +52,7 @@ public class AccFragment extends BaseFragment {
     protected void onVisible() {
         super.onVisible();
         Log.e(TAG, "onVisible");
-        ((HomeActivity) getActivity()).setIntervalTime(INTERVAL_ACC);
+        ((HomeActivity) getActivity()).setType(INTERVAL_ACC);
     }
 
     @Override
