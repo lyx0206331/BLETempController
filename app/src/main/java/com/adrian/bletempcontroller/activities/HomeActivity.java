@@ -292,10 +292,10 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                 public void run() {
                     String all = String.valueOf(HexUtil.encodeHex(characteristic.getValue()));
                     float[] values = new float[4];
-                    values[3] = (float) (Integer.parseInt(all.substring(0, 4), 16) * .01f + Math.random() * .1f);
-                    values[2] = (float) (Integer.parseInt(all.substring(4, 8), 16) * .01f + Math.random() * .1f);
-                    values[1] = (float) (Integer.parseInt(all.substring(8, 12), 16) * .01f + Math.random() * .1f);
-                    values[0] = (float) (Integer.parseInt(all.substring(12, 16), 16) * .01f + Math.random() * .1f);
+                    values[3] = (float) (Integer.parseInt(all.substring(0, 4), 16) * .01f + Math.random() * .03f);
+                    values[2] = (float) (Integer.parseInt(all.substring(4, 8), 16) * .01f + Math.random() * .03f);
+                    values[1] = (float) (Integer.parseInt(all.substring(8, 12), 16) * .01f + Math.random() * .03f);
+                    values[0] = (float) (Integer.parseInt(all.substring(12, 16), 16) * .01f + Math.random() * .03f);
 //                                String value = new String(characteristic.getValue());
                     if (type == 0) {
                         index %= 2;
