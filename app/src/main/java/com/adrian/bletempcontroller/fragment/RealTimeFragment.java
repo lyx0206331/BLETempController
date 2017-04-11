@@ -31,7 +31,7 @@ public class RealTimeFragment extends BaseFragment {
     private TextView mRealtimeTempTV;
     private TextView mUsrNameTV;
 
-    private float[] cents = {37.6f, 37.7f, 38.0f, 37.8f};
+    private float[] cents = new float[4];
     private float cent = 37.8f;
     private int index;
 
@@ -93,7 +93,9 @@ public class RealTimeFragment extends BaseFragment {
 //        if (index == 3 && !TextUtils.isEmpty(temp)) {
 //            mRealtimeTempTV.setText(temp);
 //        } else {
-        mRealtimeTempTV.setText(getString(R.string.centigrade, cents[index]));
+        if (cents != null && cents.length == 4) {
+            mRealtimeTempTV.setText(getString(R.string.centigrade, cents[index]));
+        }
 //        }
         index++;
         index %= 4;

@@ -51,6 +51,7 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
 
     private BleManager bleManager;
     private String userName = "宝宝";
+    private BluetoothDevice curDev;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,8 +167,9 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                                 devices) {
                             Log.e(TAG, "dev name:" + dev.getName() + " / " + dev.getAddress());
                             if (!TextUtils.isEmpty(dev.getName()) && dev.getName().equals("zwg's pet")) {
+                                curDev = dev;
                                 bleManager.stopListenConnectCallback();
-                                connectSpecialDevice(dev);
+                                connectSpecialDevice();
                                 return;
                             }
                         }
@@ -178,60 +180,63 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
         });
     }
 
+    BleGattCallback bleGattCallback = new BleGattCallback() {
+        @Override
+        public void onNotFoundDevice() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideProgress();
+                    Toast.makeText(HomeActivity.this, "onNotFoundDevice", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        @Override
+        public void onFoundDevice(BluetoothDevice device) {
+
+        }
+
+        @Override
+        public void onConnectSuccess(BluetoothGatt gatt, int status) {
+            gatt.discoverServices();
+        }
+
+        @Override
+        public void onServicesDiscovered(final BluetoothGatt gatt, int status) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideProgress();
+                    Log.e(TAG, "Mac Addr : " + curDev.getAddress());
+                    showConnectState2(curDev.getName(), gatt);
+                }
+            });
+        }
+
+        @Override
+        public void onConnectFailure(BleException exception) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideProgress();
+//                        showDisConnectState();
+//                    mHandler.sendEmptyMessageDelayed(0, intervalTime);
+                    connectSpecialDevice();
+                }
+            });
+            bleManager.handleException(exception);
+
+            Log.e(TAG, "connect failed:" + exception.getCode() + " " + exception.getDescription());
+        }
+    };
+
     /**
      * 连接设备
      */
-    private void connectSpecialDevice(final BluetoothDevice device) {
+    private void connectSpecialDevice() {
         showProgress("正在连接设备...");
-        bleManager.connectDevice(device, true, new BleGattCallback() {
-            @Override
-            public void onNotFoundDevice() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgress();
-                        Toast.makeText(HomeActivity.this, "onNotFoundDevice", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onFoundDevice(BluetoothDevice device) {
-
-            }
-
-            @Override
-            public void onConnectSuccess(BluetoothGatt gatt, int status) {
-                gatt.discoverServices();
-            }
-
-            @Override
-            public void onServicesDiscovered(final BluetoothGatt gatt, int status) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgress();
-                        Log.e(TAG, "Mac Addr : " + device.getAddress());
-                        showConnectState2(device.getName(), gatt);
-                    }
-                });
-            }
-
-            @Override
-            public void onConnectFailure(BleException exception) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgress();
-//                        showDisConnectState();
-                        mHandler.sendEmptyMessageDelayed(0, 1000);
-                    }
-                });
-                bleManager.handleException(exception);
-
-                Log.e(TAG, "exception:" + exception.getCode() + " " + exception.getDescription());
-            }
-        });
+        bleManager.connectDevice(curDev, true, bleGattCallback);
     }
 
     private void showConnectState2(String deviceName, BluetoothGatt gatt) {
@@ -252,7 +257,7 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                                 ((AccFragment) fragments[0]).setTemp(String.valueOf(HexUtil.encodeHex(characteristic.getValue())));
                                 mHandler.sendEmptyMessageDelayed(1, intervalTime);
                             } else {
-                                mHandler.sendEmptyMessageDelayed(1, 4000);
+                                mHandler.sendEmptyMessageDelayed(1, intervalTime);
                             }
                         }
 
@@ -272,13 +277,29 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                     scanDevice();
                     break;
                 case 1:
-                    startRead2(SERVICE_UUID, CHAR_UUID);
+                    boolean suc = startRead2(SERVICE_UUID, CHAR_UUID);
 //            stopListen(CHAR_UUID);
-                    sendEmptyMessageDelayed(1, intervalTime);
+                    if (!suc) {
+//                        bleManager.stopListenCharacterCallback(CHAR_UUID);
+                        connectSpecialDevice();
+                    } else {
+                        sendEmptyMessageDelayed(1, intervalTime);
+                    }
                     break;
             }
         }
     };
+
+    /**
+     * 获取-.01~.01的偏移量
+     *
+     * @return
+     */
+    private float getOffset() {
+        float[] offsets = {-.01f, 0, .01f};
+        int index = (int) (Math.random() * 3);
+        return offsets[index];
+    }
 
     private int index = 0;
     private int[] colors = {0x80ff0000/*, 0x8000ff00*/, 0x800000ff};
@@ -292,10 +313,10 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                 public void run() {
                     String all = String.valueOf(HexUtil.encodeHex(characteristic.getValue()));
                     float[] values = new float[4];
-                    values[3] = (float) (Integer.parseInt(all.substring(0, 4), 16) * .01f + Math.random() * .03f);
-                    values[2] = (float) (Integer.parseInt(all.substring(4, 8), 16) * .01f + Math.random() * .03f);
-                    values[1] = (float) (Integer.parseInt(all.substring(8, 12), 16) * .01f + Math.random() * .03f);
-                    values[0] = (float) (Integer.parseInt(all.substring(12, 16), 16) * .01f + Math.random() * .03f);
+                    values[3] = Integer.parseInt(all.substring(0, 4), 16) * .01f + getOffset();
+                    values[2] = Integer.parseInt(all.substring(4, 8), 16) * .01f + getOffset();
+                    values[1] = Integer.parseInt(all.substring(8, 12), 16) * .01f + getOffset();
+                    values[0] = Integer.parseInt(all.substring(12, 16), 16) * .01f + getOffset();
 //                                String value = new String(characteristic.getValue());
                     if (type == 0) {
                         index %= 2;
@@ -313,20 +334,20 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
         @Override
         public void onFailure(BleException exception) {
             bleManager.handleException(exception);
-            Log.e(TAG, "exception:" + exception.getCode() + " " + exception.getDescription());
-            if (bleManager.isConnected()) {
-                mHandler.sendEmptyMessage(1);
-            } else {
-                if (!bleManager.isInScanning()) {
-//                    bleManager.closeBluetoothGatt();
-//                    initBle();
-                    mHandler.sendEmptyMessageDelayed(0, 1000);
-                }
-            }
+            Log.e(TAG, "read failed:" + exception.getCode() + " " + exception.getDescription());
+//            if (bleManager.isConnected()) {
+//                mHandler.sendEmptyMessage(1);
+//            } else {
+//                if (!bleManager.isInScanning()) {
+////                    bleManager.closeBluetoothGatt();
+////                    initBle();
+//                    mHandler.sendEmptyMessageDelayed(0, 1000);
+//                }
+//            }
         }
     };
 
-    private void startRead2(String serviceUUID, final String characterUUID) {
+    private boolean startRead2(String serviceUUID, final String characterUUID) {
         Log.i(TAG, "startRead");
         boolean suc = bleManager.readDevice(
                 serviceUUID,
@@ -343,5 +364,6 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
 //                mHandler.sendEmptyMessage(0);
 //            }
         }
+        return suc;
     }
 }
