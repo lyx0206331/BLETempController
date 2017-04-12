@@ -48,6 +48,12 @@ public class TempUtil {
         return false;
     }
 
+    /**
+     * 随机获取正负1
+     *
+     * @param offset
+     * @return
+     */
     public static float getRandom(float offset) {
         int a = (int) (Math.random() * 2 + 1);
         int aa = (int) (Math.pow(-1, a));

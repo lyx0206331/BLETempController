@@ -200,6 +200,12 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
         @Override
         public void onConnectSuccess(BluetoothGatt gatt, int status) {
             gatt.discoverServices();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    TempUtil.showToast("连接成功");
+                }
+            });
         }
 
         @Override
@@ -210,19 +216,20 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                     hideProgress();
                     Log.e(TAG, "Mac Addr : " + curDev.getAddress());
                     showConnectState2(curDev.getName(), gatt);
+                    TempUtil.showToast("发现设备");
                 }
             });
         }
 
         @Override
         public void onConnectFailure(BleException exception) {
+            mHandler.removeMessages(1);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     hideProgress();
-//                        showDisConnectState();
-//                    mHandler.sendEmptyMessageDelayed(0, intervalTime);
-                    connectSpecialDevice();
+//                    connectSpecialDevice();
+                    TempUtil.showToast("连接失败");
                 }
             });
             bleManager.handleException(exception);
@@ -278,12 +285,15 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                     break;
                 case 1:
                     boolean suc = startRead2(SERVICE_UUID, CHAR_UUID);
-//            stopListen(CHAR_UUID);
-                    if (!suc) {
-//                        bleManager.stopListenCharacterCallback(CHAR_UUID);
-                        connectSpecialDevice();
-                    } else {
+//                    if (!suc) {
+//                        connectSpecialDevice();
+//                    } else {
+//                        sendEmptyMessageDelayed(1, intervalTime);
+//                    }
+                    if (suc) {
                         sendEmptyMessageDelayed(1, intervalTime);
+                    } else {
+                        removeMessages(1);
                     }
                     break;
             }
@@ -316,7 +326,7 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                     values[3] = Integer.parseInt(all.substring(0, 4), 16) * .01f + getOffset();
                     values[2] = Integer.parseInt(all.substring(4, 8), 16) * .01f + getOffset();
                     values[1] = Integer.parseInt(all.substring(8, 12), 16) * .01f + getOffset();
-                    values[0] = Integer.parseInt(all.substring(12, 16), 16) * .01f + getOffset();
+                    values[0] = Integer.parseInt(all.substring(12, 16), 16) * .01f;
 //                                String value = new String(characteristic.getValue());
                     if (type == 0) {
                         index %= 2;
