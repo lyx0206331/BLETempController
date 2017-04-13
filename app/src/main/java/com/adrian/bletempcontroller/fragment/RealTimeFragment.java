@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,21 +22,24 @@ import com.adrian.bletempcontroller.activities.HomeActivity;
 /**
  * 实时测量
  */
-public class RealTimeFragment extends BaseFragment {
+public class RealTimeFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "RealTimeFragment";
 
     private static final int INTERVAL_RT = 1;
 
-    private ImageView mBgIV;
     private TextView mRealtimeTempTV;
     private TextView mUsrNameTV;
+    private TextView mMaxTempTV;
+    private Button mResetBtn;
 
     private float[] cents = new float[4];
     private float cent = 37.8f;
     private int index;
 
     private String temp;
+
+    private float maxTemp = 0f;
 
     Handler mHandler = new Handler() {
         @Override
@@ -61,10 +65,12 @@ public class RealTimeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mLayout = inflater.inflate(R.layout.fragment_real_time, container, false);
-        mBgIV = (ImageView) mLayout.findViewById(R.id.iv_bg);
         mRealtimeTempTV = (TextView) mLayout.findViewById(R.id.tv_realtime_temp);
         mUsrNameTV = (TextView) mLayout.findViewById(R.id.tv_rt_name);
         mUsrNameTV.setText(((HomeActivity) getActivity()).getUserName());
+        mMaxTempTV = (TextView) mLayout.findViewById(R.id.tv_max);
+        mResetBtn = (Button) mLayout.findViewById(R.id.btn_reset);
+        mResetBtn.setOnClickListener(this);
         ((HomeActivity) getActivity()).setType(INTERVAL_RT);
 //        mHandler.sendEmptyMessage(0);
         return mLayout;
@@ -94,17 +100,13 @@ public class RealTimeFragment extends BaseFragment {
 //            mRealtimeTempTV.setText(temp);
 //        } else {
         if (cents != null && cents.length == 4) {
+            getMaxTemp(cents[index]);
             mRealtimeTempTV.setText(getString(R.string.centigrade, cents[index]));
         }
 //        }
         index++;
         index %= 4;
         mHandler.sendEmptyMessageDelayed(0, 250);
-    }
-
-    private void startRotate() {
-        Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.clockwise_rotation);
-        mBgIV.startAnimation(anim);
     }
 
     public void setUsrName(String name) {
@@ -131,6 +133,20 @@ public class RealTimeFragment extends BaseFragment {
         for (int i = 0; i < 4; i++) {
             float r = (float) Math.random();
             cents[i] = value + r;
+        }
+    }
+
+    private void getMaxTemp(float value) {
+        maxTemp = Math.max(maxTemp, value);
+        mMaxTempTV.setText(getString(R.string.centigrade, maxTemp));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_reset:
+                mMaxTempTV.setText("0.00℃");
+                break;
         }
     }
 }

@@ -34,6 +34,10 @@ public class TempUtil {
         Toast.makeText(MyApplication.getInstance(), msg, Toast.LENGTH_SHORT).show();
     }
 
+    public static void showToast(int resourceId) {
+        Toast.makeText(MyApplication.getInstance(), resourceId, Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * Location service if enable
      *

@@ -56,6 +56,14 @@
             android:name=".activities.HomeActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activities.Home2Activity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait"></activity>
+
+        <service
+            android:name=".activities.BluetoothLeService"
+            android:enabled="true" />
 
         <!--sample-->
         <activity

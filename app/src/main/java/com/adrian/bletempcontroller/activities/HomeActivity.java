@@ -285,16 +285,11 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
                     break;
                 case 1:
                     boolean suc = startRead2(SERVICE_UUID, CHAR_UUID);
-//                    if (!suc) {
-//                        connectSpecialDevice();
+//                    if (suc) {
+                    sendEmptyMessageDelayed(1, intervalTime);
 //                    } else {
-//                        sendEmptyMessageDelayed(1, intervalTime);
+//                        removeMessages(1);
 //                    }
-                    if (suc) {
-                        sendEmptyMessageDelayed(1, intervalTime);
-                    } else {
-                        removeMessages(1);
-                    }
                     break;
             }
         }
