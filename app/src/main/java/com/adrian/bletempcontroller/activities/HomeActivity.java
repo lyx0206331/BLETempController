@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -64,6 +65,8 @@ public class HomeActivity extends BaseFragmentActivity implements RadioGroup.OnC
     }
 
     private void initBle() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         bleManager = new BleManager(this);
         bleManager.enableBluetooth();
     }

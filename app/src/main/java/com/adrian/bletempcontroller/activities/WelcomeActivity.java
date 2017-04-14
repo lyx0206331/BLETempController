@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.adrian.bletempcontroller.R;
+import com.adrian.bletempcontroller.utils.TempUtil;
 
 import static com.adrian.bletempcontroller.utils.TempUtil.isLocationEnable;
 import static com.adrian.bletempcontroller.utils.TempUtil.showToast;
@@ -32,6 +33,11 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            TempUtil.showToast(R.string.ble_not_supported);
+            finish();
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//如果 API level 是大于等于 23(Android 6.0) 时
             //判断是否具有权限
