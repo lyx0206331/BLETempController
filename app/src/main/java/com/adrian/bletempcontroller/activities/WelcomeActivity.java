@@ -35,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            TempUtil.showToast(R.string.ble_not_supported);
+            TempUtil.showToast(this, R.string.ble_not_supported);
             finish();
         }
 
@@ -46,7 +46,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 //判断是否需要向用户解释为什么需要申请该权限
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    showToast("自Android 6.0开始需要打开位置权限才可以搜索到Ble设备");
+                    showToast(this, "自Android 6.0开始需要打开位置权限才可以搜索到Ble设备");
                 }
                 //请求权限
                 ActivityCompat.requestPermissions(this,
